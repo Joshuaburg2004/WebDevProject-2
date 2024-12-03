@@ -5,14 +5,47 @@ function App() {
     
 <div>
   <h1>Attendance</h1>
-  <h2>Monday</h2> <h3> on site or online</h3>
-  <h2>Tuesday</h2>
-  <h2>Wednesday</h2>
-  <h2>Thursday</h2>
-  <h2>Friday</h2>
-
-      
-</div>
+      <div>
+        Monday:
+        <input
+          prompt={""}
+          type='text'
+        />
+      </div>
+      <div>
+        Tuesday:
+        <input
+          prompt={""}
+          type='text'
+        />
+      </div>
+      <div>
+        Wednesday:
+        <input
+          prompt={""}
+          type='text'
+        />
+      </div>
+      <div>
+        Thursday:
+        <input
+          prompt={""}
+          type='text'
+        />
+      </div>
+      <div>
+        Friday:
+        <input
+          prompt={""}
+          type='text'
+        />
+      </div>
+      <div>
+        <button>
+            Submit
+        </button>
+      </div>
+    </div>
   );
 }
  
