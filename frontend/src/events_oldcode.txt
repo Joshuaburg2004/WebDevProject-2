@@ -1,8 +1,10 @@
-import logo from './logo.svg';
 import React, { useState } from 'react'; 
-import './App.css';
 
-function App() {
+export type EventProps = {
+    storage:
+}
+
+export function Events() {
   const [events, setEvents] = useState([]); //opslag
   const [newEvent, setNewEvent] = useState(''); //opslag
 
@@ -52,7 +54,7 @@ function App() {
   );
 }
 
-export default App;
+export default Events;
 
 //npm start
 //4
