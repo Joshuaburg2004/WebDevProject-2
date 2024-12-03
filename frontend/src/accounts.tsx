@@ -1,11 +1,10 @@
 import { Map } from 'immutable';
+import React from 'react';
 
 type UserView = 
+    'home' |
     'login' |
-    'register' |
-    'profile' |
-    'edit' |
-    'logout'
+    'register'
 
 export interface User{
     id: number
@@ -15,17 +14,28 @@ export interface User{
 }
 
 export interface UserState{
+    email: string
+    username: string
+    password: string
     storage: Map<number, User>
+    message: string
     currentId: number
     view: UserView
     setUserView: (view: UserView) => (state: UserState) => UserState
-    setStorage: (storage: Map<number, User>) => (state: UserState) => void
-    insertUser: (user: User) => (state: UserState) => void
+    setStorage: (storage: Map<number, User>) => (state: UserState) => UserState
+    updateEmail: (email: string) => (state: UserState) => UserState
+    updateUsername: (username: string) => (state: UserState) => UserState
+    updatePassword: (password: string) => (state: UserState) => UserState
+    updateMessage: (message: string) => (state: UserState) => UserState
     logIn: (email: string, password: string) => (state: UserState) => boolean
 }
 
 export const initUserState: UserState = {
+    email: "",
+    username: "",
+    password: "",
     storage: Map(),
+    message: "",
     currentId: 0,
     view: 'register',
     setUserView: (view: UserView) => (state: UserState) => ({
@@ -36,12 +46,21 @@ export const initUserState: UserState = {
         ...state,
         storage: storage
     }),
-    insertUser: (user: User) => (state: UserState) => ({
+    updateEmail: (email: string) => (state: UserState) => ({
         ...state,
-        storage: state.storage.set(state.currentId, ({
-            ...user,
-            id: state.currentId
-        }))
+        email: email
+    }),
+    updateUsername: (username: string) => (state: UserState) => ({
+        ...state,
+        username: username
+    }),
+    updatePassword: (password: string) => (state: UserState) => ({
+        ...state,
+        password: password
+    }),
+    updateMessage: (message: string) => (state: UserState) => ({
+        ...state,
+        message: message
     }),
     logIn: (email: string, password: string) => (state: UserState) => {
         for (const user of state.storage.values()){
@@ -52,3 +71,69 @@ export const initUserState: UserState = {
         return false
     }
 }
+
+export interface UserProps{
+    insertUser: (_: User) => void
+    updateName: (name: string) => void
+    updateEmail: (email: string) => void
+    updatePassword: (password: string) => void
+    updateMessage: (message: string) => void
+}
+
+export class Users extends React.Component<UserProps, UserState>{
+    constructor(props: UserProps){
+        super(props)
+        this.state = initUserState
+    }
+    render(): JSX.Element {
+        switch(this.state.view){
+            case 'home':
+                return (
+                    <div>
+                        <button onClick={_ => this.state.setUserView('login')}>Login</button>
+                        <button onClick={_ => this.state.setUserView('register')}>Register</button>
+                    </div>
+                )
+            case 'register':
+                return (
+                    <div>
+                        This is not yet done!
+                    </div>
+                )       
+            case 'login':
+                return (
+                    <div>
+                        Please log in below to use Calendify.
+                        If you do not yet have an account, click "Register" below.
+                        <div>
+                            Email:
+                            <input 
+                                value={this.state.email}
+                                onChange={e => {
+                                    this.props.updateEmail(e.currentTarget.value); 
+                                    this.props.updateMessage("")
+                                }}
+                            />
+                        </div>
+                        <div>
+                            Password:
+                            <input
+                                value={this.state.password}
+                                onChange={e => {
+                                    this.props.updatePassword(e.currentTarget.value); 
+                                    this.props.updateMessage("")
+                                }}                                
+                            />
+                        </div>
+                        <button onClick={e => {
+                                if(this.state.logIn(this.state.email, this.state.password))
+                                    this.props.updateMessage("Logged in!")
+                                else
+                                    this.props.updateMessage("Not logged in, combination of email and password not found")
+                                alert(this.state.message)
+                            }}>Log in</button>
+                    </div>
+                )
+        }
+    }
+} 
