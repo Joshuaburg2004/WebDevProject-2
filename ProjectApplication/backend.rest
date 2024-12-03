@@ -1,0 +1,16 @@
+POST http://localhost:5000/api/v1/create/user HTTP/1.1
+content-type: application/json
+
+{
+    "Id":"948029cd-2fae-4e06-a770-d636224626ee",
+    "First_name": "John",
+    "Last_name": "Doe",
+    "Email": "john.doe@example.net",
+    "Password": "password",
+    "Recurring_days": 0
+}
+###
+GET http://localhost:5000/api/v1/get/user?userId=948029cd-2fae-4e06-a770-d636224626ee HTTP/1.1
+###
+
+GET http://localhost:5000/ HTTP/1.1
