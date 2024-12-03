@@ -2,7 +2,6 @@ import { Map } from 'immutable';
 import React from 'react';
 
 type UserView = 
-    'home' |
     'login' |
     'register'
 
@@ -87,13 +86,6 @@ export class Users extends React.Component<UserProps, UserState>{
     }
     render(): JSX.Element {
         switch(this.state.view){
-            case 'home':
-                return (
-                    <div>
-                        <button onClick={_ => this.state.setUserView('login')}>Login</button>
-                        <button onClick={_ => this.state.setUserView('register')}>Register</button>
-                    </div>
-                )
             case 'register':
                 return (
                     <div>
