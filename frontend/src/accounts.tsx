@@ -10,40 +10,26 @@ export interface UserState{
     email: string
     username: string
     password: string
-    storage: Map<number, User>
     message: string
     currentId: number
     view: UserView
     setUserView: (view: UserView) => (state: UserState) => UserState
-    insertPerson: (state: UserState) => UserState
     updateEmail: (email: string) => (state: UserState) => UserState
     updateUsername: (username: string) => (state: UserState) => UserState
     updatePassword: (password: string) => (state: UserState) => UserState
     updateMessage: (message: string) => (state: UserState) => UserState
-    logIn: (email: string, password: string) => (state: UserState) => boolean
 }
 
 export const initUserState: UserState = {
     email: "",
     username: "",
     password: "",
-    storage: Map(),
     message: "",
     currentId: 0,
     view: 'register',
     setUserView: (view: UserView) => (state: UserState) => ({
         ...state,
         view: view
-    }),
-    insertPerson: (state: UserState): UserState => ({
-        ...state,
-        currentId: state.currentId + 1,
-        storage: state.storage.set(state.currentId, {
-            id: state.currentId,
-            username: state.username,
-            email: state.email,
-            password: state.password
-        })
     }),
     updateEmail: (email: string) => (state: UserState) => ({
         ...state,
@@ -60,15 +46,7 @@ export const initUserState: UserState = {
     updateMessage: (message: string) => (state: UserState) => ({
         ...state,
         message: message
-    }),
-    logIn: (email: string, password: string) => (state: UserState) => {
-        for (const user of state.storage.values()){
-            if (user.email === email && user.password === password){
-                return true
-            }
-        }
-        return false
-    }
+    })
 }
 
 export interface UserProps{
@@ -77,6 +55,8 @@ export interface UserProps{
     updateEmail: (email: string) => void
     updatePassword: (password: string) => void
     updateMessage: (message: string) => void
+    emailUsed: (email: string) => boolean
+    logIn: (email: string) => (password: string) => boolean
 }
 
 export class Users extends React.Component<UserProps, UserState>{
@@ -121,11 +101,19 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={e => {
-                                if(this.state.storage.filter(u => u.email == this.state.email).count() > 0)
+                                if(this.props.emailUsed(this.state.email))
                                     this.props.updateMessage("This email is already used for an account, please use another.")
                                 else
                                 {
-                                    this.setState(this.state.insertPerson(this.state))
+                                    this.setState({
+                                        ...this.state, currentId: this.state.currentId + 1
+                                    })
+                                    this.props.insertUser({
+                                        id: this.state.currentId,
+                                        username: this.state.username,
+                                        email: this.state.email,
+                                        password: this.state.password
+                                    })
                                     this.props.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`)
                                 }
                                 alert(this.state.message)
@@ -158,7 +146,7 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={e => {
-                                if(this.state.logIn(this.state.email, this.state.password))
+                                if(this.props.logIn(this.state.email)(this.state.password))
                                     this.props.updateMessage("Logged in!")
                                 else
                                     this.props.updateMessage("Not logged in, combination of email and password not found")
