@@ -59,7 +59,9 @@ export class HomePage extends React.Component<{}, HomeState> {
                 )
             case 'registration/login':
                 return (
-                    <Users insertUser={}/>
+                    <div>
+                        
+                    </div>
                 )
             case 'userattendance':
                 return (
