@@ -21,7 +21,7 @@ export interface UserState{
     currentId: number
     view: UserView
     setUserView: (view: UserView) => (state: UserState) => UserState
-    setStorage: (storage: Map<number, User>) => (state: UserState) => UserState
+    insertPerson: (state: UserState) => UserState
     updateEmail: (email: string) => (state: UserState) => UserState
     updateUsername: (username: string) => (state: UserState) => UserState
     updatePassword: (password: string) => (state: UserState) => UserState
@@ -41,9 +41,15 @@ export const initUserState: UserState = {
         ...state,
         view: view
     }),
-    setStorage: (storage: Map<number, User>) => (state: UserState) => ({
+    insertPerson: (state: UserState): UserState => ({
         ...state,
-        storage: storage
+        currentId: state.currentId + 1,
+        storage: state.storage.set(state.currentId, {
+            id: state.currentId,
+            username: state.username,
+            email: state.email,
+            password: state.password
+        })
     }),
     updateEmail: (email: string) => (state: UserState) => ({
         ...state,
@@ -118,8 +124,10 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={e => {
-                                if(this.state.logIn(this.state.email, this.state.password))
+                                if(this.state.logIn(this.state.email, this.state.password)){
                                     this.props.updateMessage("Logged in!")
+                                    this.state.insertPerson(this.state)
+                                }
                                 else
                                     this.props.updateMessage("Not logged in, combination of email and password not found")
                                 alert(this.state.message)
