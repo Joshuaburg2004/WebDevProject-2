@@ -124,10 +124,8 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={e => {
-                                if(this.state.logIn(this.state.email, this.state.password)){
+                                if(this.state.logIn(this.state.email, this.state.password))
                                     this.props.updateMessage("Logged in!")
-                                    this.state.insertPerson(this.state)
-                                }
                                 else
                                     this.props.updateMessage("Not logged in, combination of email and password not found")
                                 alert(this.state.message)
