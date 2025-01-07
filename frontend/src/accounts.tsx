@@ -95,7 +95,37 @@ export class Users extends React.Component<UserProps, UserState>{
             case 'register':
                 return (
                     <div>
-                        This is not yet done!
+                        Enter your information below to create your account:
+                        <div>
+                            Email: 
+                            <input 
+                                value={this.state.email}
+                                onChange={e => {
+                                    this.props.updateEmail(e.currentTarget.value); 
+                                    this.props.updateMessage("")
+                                }}
+                            />
+                        </div>
+                        <div>
+                            Password:
+                            <input
+                                value={this.state.password}
+                                onChange={e => {
+                                    this.props.updatePassword(e.currentTarget.value); 
+                                    this.props.updateMessage("")
+                                }}                                
+                            />
+                        </div>
+                        <button onClick={e => {
+                                if(this.state.storage.filter(u => u.email == this.state.email).count() > 0)
+                                    this.props.updateMessage("This email is already used for an account, please use another.")
+                                else
+                                {
+                                    this.setState(this.state.insertPerson(this.state))
+                                    this.props.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`)
+                                }
+                                alert(this.state.message)
+                            }}>Log in</button>
                     </div>
                 )       
             case 'login':
