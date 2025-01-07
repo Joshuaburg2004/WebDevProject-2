@@ -97,6 +97,16 @@ export class Users extends React.Component<UserProps, UserState>{
                     <div>
                         Enter your information below to create your account:
                         <div>
+                            Username:
+                            <input
+                                value={this.state.username}
+                                onChange={e => {
+                                    this.props.updateName(e.currentTarget.value);
+                                    this.props.updateMessage("")
+                                }}
+                            />
+                        </div>
+                        <div>
                             Email: 
                             <input 
                                 value={this.state.email}
