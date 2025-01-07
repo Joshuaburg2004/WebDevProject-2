@@ -1,16 +1,10 @@
 import { Map } from 'immutable';
+import { User } from './home'
 import React from 'react';
 
 type UserView = 
     'login' |
     'register'
-
-export interface User{
-    id: number
-    username: string
-    email: string
-    password: string
-}
 
 export interface UserState{
     email: string

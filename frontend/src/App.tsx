@@ -1,11 +1,9 @@
 import React from 'react';
-import { User, Users } from './accounts';
-import {Userattendance} from './userattendance';
+import { Users } from './accounts';
+import { HomeView, User } from './home';
+import { Userattendance } from './userattendance';
 import logo from './logo.svg';
 import './App.css';
-
-export type HomeState = 
-  "home" | ""
 
 
 function App(): JSX.Element {
