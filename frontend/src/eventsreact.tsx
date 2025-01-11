@@ -1,35 +1,35 @@
-import React, {useState} from 'react';
- 
+import React, { useState } from 'react';
+
 export const Eventsreact = (): JSX.Element => {
-    const [newEvent, setNewEvent] = useState('');
+  const [newEvent, setNewEvent] = useState(''); // Voor de input
+  const [events, setEvents] = useState<string[]>([]); // Voor de lijst met evenementen
+
+  const HandleAddEvent = () => {
+    if(newEvent.trim() !== '') {
+      setEvents([...events,newEvent]);
+      setNewEvent('');
+    }
+  }
   return (
     <div>
-    <h1>Events</h1>
-    <h2>Add event</h2>
-
-    {}
-    <input
-    
+      <h1>Events</h1>
+      
+      <h2>Add event</h2>
+      <input
         type="text"
         value={newEvent}
-        placeholder="Add new event" //empty placeholder
-    
-    />
-
-    {}
-    <button>Add new event</button>
-    
-
-    <h4 style={{ margin: 0, padding: 0 }}>Monday:</h4>
-    <h4 style={{ margin: 0, padding: 0 }}>Tuesday:</h4>
-    <h4 style={{ margin: 0, padding: 0 }}>Wednesday:</h4>
-    <h4 style={{ margin: 0, padding: 0 }}>Thursday:</h4>
-    <h4 style={{ margin: 0, padding: 0 }}>Friday:</h4>
-    
+        placeholder="Add new event"
+        onChange={(e) => setNewEvent(e.target.value)}
+      />
+      <button onClick={HandleAddEvent}>Add New Event</button>     
+      <h2>Upcoming Events</h2>
+      <ul>
+        {events.map((event, index) => (
+          <li key={index}>{event}</li>
+        ))}
+      </ul>
     </div>
   );
-}
- 
-export default Eventsreact;
+};
 
-//comment voor push ff !
+export default Eventsreact;
