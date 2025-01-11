@@ -59,3 +59,8 @@ export const Eventsreact = (): JSX.Element => {
 };
 
 export default Eventsreact;
+
+//de inputfielden wil ik onder elkaar
+//lijnmanier maar voor alle andere fields erbij ( ook tijd datum beschrijving)
+//layout veranderen en afbeeldingen
+//wss moeten links gezet worden tussen de backend
