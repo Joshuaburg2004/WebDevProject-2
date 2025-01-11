@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
 
+interface Event {
+  title: string;
+  date: string;
+  location: string;
+}
+
 export const Eventsreact = (): JSX.Element => {
-  const [newEvent, setNewEvent] = useState(''); // Voor de input
-  const [events, setEvents] = useState<string[]>([]); // Voor de lijst met evenementen
+  const [newEvent, setNewEvent] = useState<Event>({
+    title: '',
+    date: '',
+    location: '',
+  });
+  const [events, setEvents] = useState<Event[]>([]);
 
   const HandleAddEvent = () => {
-    if(newEvent.trim() !== '') {
-      setEvents([...events,newEvent]);
-      setNewEvent('');
+    if (newEvent.title.trim() !== '') {
+      setEvents([...events, newEvent]);
+      setNewEvent({ title: '', date: '', location: '' });
     }
-  }
+  };
+
   return (
     <div>
       <h1>Events</h1>
@@ -17,15 +28,30 @@ export const Eventsreact = (): JSX.Element => {
       <h2>Add event</h2>
       <input
         type="text"
-        value={newEvent}
-        placeholder="Add new event"
-        onChange={(e) => setNewEvent(e.target.value)}
+        value={newEvent.title}
+        placeholder="Event title"
+        onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
       />
-      <button onClick={HandleAddEvent}>Add New Event</button>     
+      <input
+        type="date"
+        value={newEvent.date}
+        placeholder="Event date"
+        onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+      />
+      <input
+        type="text"
+        value={newEvent.location}
+        placeholder="Event location"
+        onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+      />
+      <button onClick={HandleAddEvent}>Add New Event</button>
+      
       <h2>Upcoming Events</h2>
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
         {events.map((event, index) => (
-          <li key={index}>{event}</li>
+          <li key={index} style={{ marginBottom: '8px', borderBottom: '1px solid #ccc', paddingBottom: '4px' }}>
+            <strong>{event.title}</strong> - {event.date} - {event.location}
+          </li>
         ))}
       </ul>
     </div>
