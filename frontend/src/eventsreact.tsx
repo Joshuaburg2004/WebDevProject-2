@@ -32,4 +32,4 @@ export const Eventsreact = (): JSX.Element => {
  
 export default Eventsreact;
 
-//comment voor push ff
+//comment voor push ff !
