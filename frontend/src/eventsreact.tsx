@@ -43,45 +43,53 @@ export const Eventsreact = (): JSX.Element => {
     <div>
       <h1>Events</h1>
       
-      <h2>Add event</h2>
-      <div className="input-container">
-        <input
-          type="text"
-          value={newEvent.title}
-          placeholder="Event title"
-          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-        />
-        <textarea
-          value={newEvent.description}
-          placeholder="Event description"
-          onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-        />
-        <input
-          type="date"
-          value={newEvent.date}
-          placeholder="Event date"
-          onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-        />
-        <input
-          type="time"
-          value={newEvent.start_time}
-          placeholder="Start time"
-          onChange={(e) => setNewEvent({ ...newEvent, start_time: e.target.value })}
-        />
-        <input
-          type="time"
-          value={newEvent.end_time}
-          placeholder="End time"
-          onChange={(e) => setNewEvent({ ...newEvent, end_time: e.target.value })}
-        />
-        <input
-          type="text"
-          value={newEvent.location}
-          placeholder="Event location"
-          onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
-        />
-      </div>
-      <button onClick={HandleAddEvent}>Add New Event</button>
+      <button onClick={() => SetisAddEventVisible(!isAddEventVisible)}>
+        {isAddEventVisible ? 'close event' : 'add event'}
+      </button>
+
+      {isAddEventVisible && (
+        <div className= "Add event">
+          <h2>Add Event</h2>
+          <div className="input-container">
+            <input
+              type="text"
+              value={newEvent.title}
+              placeholder="Event title"
+              onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+            />
+            <textarea
+              value={newEvent.description}
+              placeholder="Event description"
+              onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+            />
+            <input
+              type="date"
+              value={newEvent.date}
+              placeholder="Event date"
+              onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+            />
+            <input
+              type="time"
+              value={newEvent.start_time}
+              placeholder="Start time"
+              onChange={(e) => setNewEvent({ ...newEvent, start_time: e.target.value })}
+            />
+            <input
+              type="time"
+              value={newEvent.end_time}
+              placeholder="End time"
+              onChange={(e) => setNewEvent({ ...newEvent, end_time: e.target.value })}
+            />
+            <input
+              type="text"
+              value={newEvent.location}
+              placeholder="Event location"
+              onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+            />
+          </div>
+          <button onClick={HandleAddEvent}>Add New Event</button>
+          </div>
+      )}
       
       <h2>Upcoming Events</h2>
       <ul>
