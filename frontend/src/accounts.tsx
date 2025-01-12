@@ -70,6 +70,7 @@ export class Users extends React.Component<UserProps, UserState>{
                 return (
                     <div>
                         Enter your information below to create your account:
+                        If you already have an account, click "Log in" below.
                         <div>
                             Username:
                             <input
@@ -102,7 +103,7 @@ export class Users extends React.Component<UserProps, UserState>{
                         </div>
                         <button onClick={e => {
                                 if(this.props.emailUsed(this.state.email))
-                                    this.props.updateMessage("This email is already used for an account, please use another.")
+                                    this.props.updateMessage("This email is already in use for an account, please use another.")
                                 else
                                 {
                                     this.setState({
@@ -117,7 +118,8 @@ export class Users extends React.Component<UserProps, UserState>{
                                     this.props.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`)
                                 }
                                 alert(this.state.message)
-                            }}>Log in</button>
+                            }}>Create account</button>
+                        <button onClick={_ => this.setState(this.state.setUserView('login'))}>Log in</button>
                     </div>
                 )       
             case 'login':
@@ -145,13 +147,14 @@ export class Users extends React.Component<UserProps, UserState>{
                                 }}                                
                             />
                         </div>
-                        <button onClick={e => {
+                        <button onClick={_ => {
                                 if(this.props.logIn(this.state.email)(this.state.password))
                                     this.props.updateMessage("Logged in!")
                                 else
                                     this.props.updateMessage("Not logged in, combination of email and password not found")
                                 alert(this.state.message)
                             }}>Log in</button>
+                        <button onClick={_ => this.setState(this.state.setUserView('register'))}>Register</button>
                     </div>
                 )
         }
