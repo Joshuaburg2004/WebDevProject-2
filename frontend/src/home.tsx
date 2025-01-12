@@ -55,6 +55,7 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         Welcome to the home page of Calendify
+                        <button onClick={() => this.setState(this.state.setView('registration/login'))}>Login</button>
                     </div>
                 )
             case 'registration/login':

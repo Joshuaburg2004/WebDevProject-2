@@ -26,7 +26,7 @@ export const initUserState: UserState = {
     password: "",
     message: "",
     currentId: 0,
-    view: 'register',
+    view: 'login',
     setUserView: (view: UserView) => (state: UserState) => ({
         ...state,
         view: view
