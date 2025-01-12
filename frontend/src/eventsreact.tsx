@@ -23,6 +23,7 @@ export const Eventsreact = (): JSX.Element => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isAddEventVisible, SetisAddEventVisible] = useState(false);
   const [isViewAllVisible, setIsViewAllVisible] = useState(false);
+  const [isUpcomingVisible, setIsUpcomingVisible] = useState(true);
 
   const HandleAddEvent = () => {
     if (newEvent.title.trim() !== '') {
@@ -50,6 +51,10 @@ export const Eventsreact = (): JSX.Element => {
 
       <button onClick={() => setIsViewAllVisible(!isViewAllVisible)}>
         {isViewAllVisible ? 'Hide All Events' : 'View All Events'}
+      </button>
+
+      <button onClick={() => setIsUpcomingVisible(!isUpcomingVisible)}>
+        {isUpcomingVisible ? 'Hide Upcoming Events' : 'View Upcoming Events'}
       </button>
 
       {isAddEventVisible && (
@@ -120,27 +125,31 @@ export const Eventsreact = (): JSX.Element => {
           </ul>
         </div>
       )}
-
-      <h2>Upcoming Events</h2>
-      <ul style={{ padding: 0 }}>
-        {events.map((event, index) => (
-          <li
-            key={index}
-            style={{
-              listStyle: 'none',
-              margin: '10px 0',
-              borderBottom: '1px solid #ccc',
-              padding: '5px 0',
-            }}
-          >
-            <p>
-              <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
-              <strong>Start Time:</strong> {event.start_time} -{' '}
-              <strong>End Time:</strong> {event.end_time}
-            </p>
-          </li>
-        ))}
-      </ul>
+      
+      {isUpcomingVisible && (
+        <div className="UpcomingEvents">
+          <h2>Upcoming Events</h2>
+          <ul style={{ padding: 0 }}>
+            {events.map((event, index) => (
+              <li
+                key={index}
+                style={{
+                  listStyle: 'none',
+                  margin: '10px 0',
+                  borderBottom: '1px solid #ccc',
+                  padding: '5px 0',
+                }}
+              >
+                <p>
+                  <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
+                  <strong>Start Time:</strong> {event.start_time} -{' '}
+                  <strong>End Time:</strong> {event.end_time}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
