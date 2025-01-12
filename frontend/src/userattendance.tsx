@@ -24,7 +24,8 @@ export const Userattendance = (): JSX.Element => {
         />
       </div>
       <div>
-        <button>
+        <button
+        onClick={_ => ""}>
             Submit
         </button>
       </div>
