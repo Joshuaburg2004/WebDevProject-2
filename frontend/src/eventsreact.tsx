@@ -41,6 +41,8 @@ export const Eventsreact = (): JSX.Element => {
     }
   };
 
+  const upcomingEvents = events.filter(event => new Date(event.date) > new Date());
+
   return (
     <div>
       <h1>Events</h1>
@@ -125,7 +127,7 @@ export const Eventsreact = (): JSX.Element => {
           </ul>
         </div>
       )}
-      
+
       {isUpcomingVisible && (
         <div className="UpcomingEvents">
           <h2>Upcoming Events</h2>
@@ -155,3 +157,8 @@ export const Eventsreact = (): JSX.Element => {
 };
 
 export default Eventsreact;
+
+
+//de extra velden moeten nog ( description etc)
+//op event klikken moet je sturen naar de page met info
+//als user niet ingelogd is moet het je terugsturen naar login screen
