@@ -71,6 +71,9 @@ export class HomePage extends React.Component<{}, HomeState> {
                     </Bootstrap.Container>
                 </Bootstrap.Navbar>
                 {this.renderContent()}
+                {this.state.view !== 'home' ? 
+                    <button onClick={() => this.setState(this.state.setView('home'))}> Back to home </button>
+                    : <></>}
             </div>
         )
     }
@@ -104,13 +107,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                                 }
                             } 
                         />
-                        <button onClick={() => this.setState(this.state.setView('home'))}> Back </button>
                     </div>
                 )
             case 'userattendance':
                 return (
                     <div>
-
+                        <Userattendance />
                     </div>
                 )
         }
