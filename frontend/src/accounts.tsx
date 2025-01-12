@@ -1,4 +1,3 @@
-import { Map } from 'immutable';
 import { User } from './home'
 import React from 'react';
 
