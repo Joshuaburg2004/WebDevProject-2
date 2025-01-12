@@ -58,24 +58,59 @@ export class HomePage extends React.Component<{}, HomeState> {
             case 'home':
                 return (
                     <div>
-                        Welcome to the home page of Calendify
+                        <Bootstrap.Navbar expand="lg" className="bg-white flex-column mb-4" style={{ fontFamily: 'Apercu-Mono' }}>
+                            <Bootstrap.Container>
+                                <Bootstrap.Navbar.Collapse id="basic-navbar-nav">
+                                    <Bootstrap.Nav className="me-auto">
+                                        {!this.state.loggedIn ? 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
+                                        {this.state.loggedIn ? 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
+                                            <></>}
+                                    </Bootstrap.Nav>
+                                </Bootstrap.Navbar.Collapse>
+                            </Bootstrap.Container>
+                        </Bootstrap.Navbar>
                         <div>
-                            <button onClick={() => this.setState(this.state.setView('registration/login'))}>Log in</button>
+                            Welcome to the home page of Calendify
                         </div>
-                        {
-                            this.state.loggedIn ? 
-                                <div>
-                                    <button onClick={() => this.setState(this.state.setView('userattendance'))}>User Attendance</button>
-                                </div> 
-                                : <></>
-                        }
-                        TEST
                     </div>
                 )
             case 'registration/login':
                 return (
                     <div>
-                        
+                        <Bootstrap.Navbar expand="lg" className="bg-white flex-column mb-4" style={{ fontFamily: 'Apercu-Mono' }}>
+                            <Bootstrap.Container>
+                                <Bootstrap.Navbar.Collapse id="basic-navbar-nav">
+                                    <Bootstrap.Nav className="me-auto">
+                                        {!this.state.loggedIn ? 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
+                                        {this.state.loggedIn ? 
+                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
+                                            <></>}
+                                    </Bootstrap.Nav>
+                                </Bootstrap.Navbar.Collapse>
+                            </Bootstrap.Container>
+                        </Bootstrap.Navbar>
+                        <Users 
+                            insertUser={(user: User) => this.setState(this.state.setCurrUser(user))}
+                            emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
+                            logIn={
+                                (email: string) => (password: string) => 
+                                {
+                                    let user = this.state.storage.find((user: User) => user.email === email && user.password === password)
+                                    if(user !== undefined)
+                                    {
+                                        this.setState(this.state.setCurrUser(user))
+                                        return true
+                                    }
+                                    return false
+                                }
+                            } 
+                        />
+                        <button onClick={() => this.setState(this.state.setView('home'))}> Back </button>
                     </div>
                 )
             case 'userattendance':
