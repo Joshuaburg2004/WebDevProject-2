@@ -54,24 +54,32 @@ export class HomePage extends React.Component<{}, HomeState> {
         this.state = initHomeState
     }
     render(): JSX.Element {
+        return (
+            <div>
+                <Bootstrap.Navbar expand="lg" className="bg-white flex-column mb-4" style={{ fontFamily: 'Apercu-Mono' }}>
+                    <Bootstrap.Container>
+                        <Bootstrap.Navbar.Collapse id="basic-navbar-nav">
+                            <Bootstrap.Nav className="me-auto">
+                                {!this.state.loggedIn ? 
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
+                                {this.state.loggedIn ? 
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
+                                    <></>}
+                            </Bootstrap.Nav>
+                        </Bootstrap.Navbar.Collapse>
+                    </Bootstrap.Container>
+                </Bootstrap.Navbar>
+                {this.renderContent()}
+            </div>
+        )
+    }
+
+    renderContent(): JSX.Element {
         switch(this.state.view){
             case 'home':
                 return (
                     <div>
-                        <Bootstrap.Navbar expand="lg" className="bg-white flex-column mb-4" style={{ fontFamily: 'Apercu-Mono' }}>
-                            <Bootstrap.Container>
-                                <Bootstrap.Navbar.Collapse id="basic-navbar-nav">
-                                    <Bootstrap.Nav className="me-auto">
-                                        {!this.state.loggedIn ? 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
-                                        {this.state.loggedIn ? 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
-                                            <></>}
-                                    </Bootstrap.Nav>
-                                </Bootstrap.Navbar.Collapse>
-                            </Bootstrap.Container>
-                        </Bootstrap.Navbar>
                         <div>
                             Welcome to the home page of Calendify
                         </div>
@@ -80,20 +88,6 @@ export class HomePage extends React.Component<{}, HomeState> {
             case 'registration/login':
                 return (
                     <div>
-                        <Bootstrap.Navbar expand="lg" className="bg-white flex-column mb-4" style={{ fontFamily: 'Apercu-Mono' }}>
-                            <Bootstrap.Container>
-                                <Bootstrap.Navbar.Collapse id="basic-navbar-nav">
-                                    <Bootstrap.Nav className="me-auto">
-                                        {!this.state.loggedIn ? 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
-                                        {this.state.loggedIn ? 
-                                            <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
-                                            <></>}
-                                    </Bootstrap.Nav>
-                                </Bootstrap.Navbar.Collapse>
-                            </Bootstrap.Container>
-                        </Bootstrap.Navbar>
                         <Users 
                             insertUser={(user: User) => this.setState(this.state.setCurrUser(user))}
                             emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
