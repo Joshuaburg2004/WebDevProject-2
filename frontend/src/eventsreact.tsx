@@ -92,19 +92,25 @@ export const Eventsreact = (): JSX.Element => {
       )}
       
       <h2>Upcoming Events</h2>
-      <ul>
+
+      <ul style={{ padding: 0 }}>
         {events.map((event, index) => (
-          <li key={index}>
-            <h3>{event.title}</h3>
-            <p>Description: {event.description}</p>
-            <p>Date: {event.date}</p>
-            <p>Start Time: {event.start_time}</p>
-            <p>End Time: {event.end_time}</p>
-            <p>Location: {event.location}</p>
-            <p>Admin Approval: {event.admin_approval ? 'Approved' : 'Pending'}</p>
+          <li 
+            key={index} 
+            style={{
+              listStyle: 'none', 
+              margin: '10px 0', 
+              borderBottom: '1px solid #ccc', 
+              padding: '5px 0'
+            }}
+          >
+            <p>
+              <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} --- <strong>Start Time:</strong> {event.start_time} - <strong>End Time:</strong> {event.end_time}
+            </p>
           </li>
         ))}
       </ul>
+
     </div>
   );
 };
