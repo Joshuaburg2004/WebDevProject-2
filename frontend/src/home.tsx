@@ -1,6 +1,8 @@
 import React from "react"
 import { Users } from "./accounts"
 import { Map } from "immutable"
+import Userattendance from "./userattendance"
+import * as Bootstrap from 'react-bootstrap';
 
 // Extend when necessary for another case in the render for HomePage
 export type HomeView = 
@@ -36,11 +38,13 @@ export const initHomeState: HomeState = ({
     }),
     setCurrUser: (user: User) => (state: HomeState) => ({
         ...state,
-        user: user
+        user: user,
+        loggedIn: true
     }),
     emptyCurrUser: (state: HomeState) => ({
         ...state,
-        user: undefined
+        user: undefined,
+        loggedIn: false
     })
 })
 
@@ -55,7 +59,17 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         Welcome to the home page of Calendify
-                        <button onClick={() => this.setState(this.state.setView('registration/login'))}>Login</button>
+                        <div>
+                            <button onClick={() => this.setState(this.state.setView('registration/login'))}>Log in</button>
+                        </div>
+                        {
+                            this.state.loggedIn ? 
+                                <div>
+                                    <button onClick={() => this.setState(this.state.setView('userattendance'))}>User Attendance</button>
+                                </div> 
+                                : <></>
+                        }
+                        TEST
                     </div>
                 )
             case 'registration/login':
