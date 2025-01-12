@@ -22,6 +22,7 @@ export const Eventsreact = (): JSX.Element => {
   });
   const [events, setEvents] = useState<Event[]>([]);
   const [isAddEventVisible, SetisAddEventVisible] = useState(false);
+  const [isViewAllVisible, setIsViewAllVisible] = useState(false);
 
   const HandleAddEvent = () => {
     if (newEvent.title.trim() !== '') {
@@ -44,11 +45,15 @@ export const Eventsreact = (): JSX.Element => {
       <h1>Events</h1>
       
       <button onClick={() => SetisAddEventVisible(!isAddEventVisible)}>
-        {isAddEventVisible ? 'close event' : 'add event'}
+        {isAddEventVisible ? 'Close Add Event' : 'Add Event'}
+      </button>
+
+      <button onClick={() => setIsViewAllVisible(!isViewAllVisible)}>
+        {isViewAllVisible ? 'Hide All Events' : 'View All Events'}
       </button>
 
       {isAddEventVisible && (
-        <div className= "Add event">
+        <div className="AddEvent">
           <h2>Add Event</h2>
           <div className="input-container">
             <input
@@ -88,33 +93,56 @@ export const Eventsreact = (): JSX.Element => {
             />
           </div>
           <button onClick={HandleAddEvent}>Add New Event</button>
-          </div>
+        </div>
       )}
-      
-      <h2>Upcoming Events</h2>
 
+      {isViewAllVisible && (
+        <div className="ViewAllEvents">
+          <h2>All Events</h2>
+          <ul style={{ padding: 0 }}>
+            {events.map((event, index) => (
+              <li
+                key={index}
+                style={{
+                  listStyle: 'none',
+                  margin: '10px 0',
+                  borderBottom: '1px solid #ccc',
+                  padding: '5px 0',
+                }}
+              >
+                <p>
+                  <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
+                  <strong>Start Time:</strong> {event.start_time} -{' '}
+                  <strong>End Time:</strong> {event.end_time}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <h2>Upcoming Events</h2>
       <ul style={{ padding: 0 }}>
         {events.map((event, index) => (
-          <li 
-            key={index} 
+          <li
+            key={index}
             style={{
-              listStyle: 'none', 
-              margin: '10px 0', 
-              borderBottom: '1px solid #ccc', 
-              padding: '5px 0'
+              listStyle: 'none',
+              margin: '10px 0',
+              borderBottom: '1px solid #ccc',
+              padding: '5px 0',
             }}
           >
             <p>
-              <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} --- <strong>Start Time:</strong> {event.start_time} - <strong>End Time:</strong> {event.end_time}
+              <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
+              <strong>Start Time:</strong> {event.start_time} -{' '}
+              <strong>End Time:</strong> {event.end_time}
             </p>
           </li>
         ))}
       </ul>
-
     </div>
   );
 };
 
 export default Eventsreact;
-
-//het horen knoppen te zijn niet direct balken voor add
