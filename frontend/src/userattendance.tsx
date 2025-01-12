@@ -8,7 +8,7 @@ export const Userattendance = (): JSX.Element => {
   <div>
         Day: 
         <input
-          type='text'
+          type='date'
           />
         from:
         <input
