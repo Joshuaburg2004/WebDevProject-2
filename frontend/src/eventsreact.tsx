@@ -41,7 +41,11 @@ export const Eventsreact = (): JSX.Element => {
     }
   };
 
-  const upcomingEvents = events.filter(event => new Date(event.date) > new Date());
+  const upcomingEvents = events.filter(event => {
+    const eventDate = new Date(event.date).setHours(0, 0, 0, 0);
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    return eventDate > currentDate;
+  });
 
   return (
     <div>
@@ -118,7 +122,8 @@ export const Eventsreact = (): JSX.Element => {
                 }}
               >
                 <p>
-                  <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
+                  <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} --- 
+                  <strong>Description:</strong> {event.description} ---
                   <strong>Start Time:</strong> {event.start_time} -{' '}
                   <strong>End Time:</strong> {event.end_time}
                 </p>
@@ -132,23 +137,28 @@ export const Eventsreact = (): JSX.Element => {
         <div className="UpcomingEvents">
           <h2>Upcoming Events</h2>
           <ul style={{ padding: 0 }}>
-            {events.map((event, index) => (
-              <li
-                key={index}
-                style={{
-                  listStyle: 'none',
-                  margin: '10px 0',
-                  borderBottom: '1px solid #ccc',
-                  padding: '5px 0',
-                }}
-              >
-                <p>
-                  <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} ---
-                  <strong>Start Time:</strong> {event.start_time} -{' '}
-                  <strong>End Time:</strong> {event.end_time}
-                </p>
-              </li>
-            ))}
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event, index) => (
+                <li
+                  key={index}
+                  style={{
+                    listStyle: 'none',
+                    margin: '10px 0',
+                    borderBottom: '1px solid #ccc',
+                    padding: '5px 0',
+                  }}
+                >
+                  <p>
+                    <strong>Event:</strong> {event.title} --- <strong>Date:</strong> {event.date} --- 
+                    <strong>Description:</strong> {event.description} ---
+                    <strong>Start Time:</strong> {event.start_time} -{' '}
+                    <strong>End Time:</strong> {event.end_time}
+                  </p>
+                </li>
+              ))
+            ) : (
+              <p>No upcoming events.</p>
+            )}
           </ul>
         </div>
       )}
@@ -157,8 +167,3 @@ export const Eventsreact = (): JSX.Element => {
 };
 
 export default Eventsreact;
-
-
-//de extra velden moeten nog ( description etc)
-//op event klikken moet je sturen naar de page met info
-//als user niet ingelogd is moet het je terugsturen naar login screen
