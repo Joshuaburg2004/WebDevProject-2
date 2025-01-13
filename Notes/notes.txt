@@ -1,0 +1,8 @@
+Login Admin and User
+Create should only be done for Admins, Using a filter - API key filter.
+check for duplicates
+Documentation for Everything
+CRUD with get/put/post/delete for EventAttendance
+UserId and EventId should not be optional
+Design Document for to make design better
+Give independant task to Berkan if he is sick longer.

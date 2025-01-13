@@ -1,0 +1,26 @@
+User
+Id, Name,etc,
+
+UserPlanning
+Uid, Mon,fromDate, tillDate
+1, Mon, 
+1, Wed, ... ,... , weekl| biwekly|monthy 
+2, Friday
+ 
+ 
+Events
+Id, Title, Date etc, approval?yes/no
+
+=== GetAllEvents ->all
+                -> approved
+                -> unapproved
+                -> disapproved
+
+
+
+EventAttend:
+Eid,UId, ...feedback, rating, 
+only approved events.
+
+OfficeAttend:
+Date, UID, ... work from office/home/sick/leave/absent,,, planning/actual
