@@ -98,7 +98,11 @@ export class Users extends React.Component<UserProps, UserState>{
                         </div>
                         <button onClick={e => {
                                 if(this.props.emailUsed(this.state.email))
-                                    this.setState(this.state.updateMessage("This email is already in use for an account, please use another."))
+                                {
+                                    this.setState(this.state.updateMessage("This email is already in use for an account, please use another."), () => {
+                                        alert(this.state.message);
+                                    });
+                                }
                                 else
                                 {
                                     this.setState({
@@ -110,9 +114,10 @@ export class Users extends React.Component<UserProps, UserState>{
                                         email: this.state.email,
                                         password: this.state.password
                                     })
-                                    this.setState(this.state.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`))
+                                    this.setState(this.state.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`), () => {
+                                        alert(this.state.message);
+                                    });
                                 }
-                                alert(this.state.message)
                             }}>Create account</button>
                         <div><button onClick={_ => this.setState(this.state.setUserView('login'))}>Log in</button></div>
                     </div>
@@ -139,15 +144,23 @@ export class Users extends React.Component<UserProps, UserState>{
                                 onChange={e => {
                                     this.setState(this.state.updatePassword(e.currentTarget.value)); 
                                     this.setState(this.state.updateMessage(""))
-                                }}                                
+                                }}
                             />
                         </div>
                         <button onClick={_ => {
                                 if(this.props.logIn(this.state.email)(this.state.password))
-                                    this.setState(this.state.updateMessage("Logged in!"))
+                                {
+                                    this.setState(this.state.updateMessage("Logged in!"), () => {
+                                        alert(this.state.message);
+                                    });
+                                }
                                 else
-                                    this.setState(this.state.updateMessage("Not logged in, combination of email and password not found"))
-                                alert(this.state.message)
+                                {
+                                    this.setState(this.state.updateMessage("Not logged in, combination of email and password not found"), () => {
+                                        alert(this.state.message);
+                                    });
+                                }
+                                
                             }}>Log in</button>
                         <div><button onClick={_ => this.setState(this.state.setUserView('register'))}>Register</button></div>
                     </div>

@@ -22,9 +22,11 @@ export interface HomeState{
     currUser: User | undefined
     loggedIn: boolean
     storage: Map<number, User>
+    currId: number
     setView: (view: HomeView) => (state: HomeState) => HomeState
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
+    addUser: (user: User) => (state: HomeState) => HomeState
 }
 
 export const initHomeState: HomeState = ({
@@ -32,6 +34,7 @@ export const initHomeState: HomeState = ({
     currUser: undefined,
     loggedIn: false,
     storage: Map(),
+    currId: 0,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -45,6 +48,11 @@ export const initHomeState: HomeState = ({
         ...state,
         user: undefined,
         loggedIn: false
+    }),
+    addUser: (user: User) => (state: HomeState) => ({
+        ...state,
+        currId: state.currId + 1,
+        storage: state.storage.set(state.currId, user)
     })
 })
 
@@ -92,12 +100,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.setCurrUser(user))}
+                            insertUser={(user: User) => this.setState(this.state.addUser(user))}
                             emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
                             logIn={
                                 (email: string) => (password: string) => 
                                 {
-                                    let user = this.state.storage.find((user: User) => user.email === email && user.password === password)
+                                    const user = this.state.storage.find((user: User) => user.email === email && user.password === password)
                                     if(user !== undefined)
                                     {
                                         this.setState(this.state.setCurrUser(user))
