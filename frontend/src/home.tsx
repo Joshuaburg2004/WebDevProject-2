@@ -2,6 +2,7 @@ import React from "react"
 import { Users } from "./accounts"
 import { Map } from "immutable"
 import Userattendance from "./userattendance"
+import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
 
 // Extend when necessary for another case in the render for HomePage
