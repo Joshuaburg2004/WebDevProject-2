@@ -4,16 +4,12 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 public class UserPlanningStorage : IUserPlanningStorage
 {
-    public async Task CreatePlanning(User user) 
+    public async Task CreatePlanning(UserPlanning userPlanning) 
     {
-        var users = JsonSerializer.Deserialize<List<User>>(System.IO.File.ReadAllText($"users/users.json"));
-        if(users is null){ users = new List<User>(); }
-        users.Add(user);
-        await System.IO.File.WriteAllTextAsync($"users/users.json", JsonSerializer.Serialize(users));
+        var newUserPlanning = JsonSerializer.Deserialize<List<UserPlanning>>(System.IO.File.ReadAllText($"users/userplanning.json"));
+        if(newUserPlanning is null){ newUserPlanning = new List<UserPlanning>(); }
+        newUserPlanning.Add(userPlanning);
+        await System.IO.File.WriteAllTextAsync($"users/users.json", JsonSerializer.Serialize(newUserPlanning));
     }
-    
-    public async Task SaveUser(User user) => 
-    await CreatePlanning(user);
-
 
 }

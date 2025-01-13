@@ -3,6 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 public interface IUserPlanningStorage
 {
-    public Task CreatePlanning(User user);
+    public Task CreatePlanning(UserPlanning userPlanning);
 
 }
