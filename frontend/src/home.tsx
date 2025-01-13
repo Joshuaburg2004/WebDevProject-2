@@ -9,7 +9,8 @@ import * as Bootstrap from 'react-bootstrap';
 export type HomeView = 
     'home' |
     'registration/login' |
-    'userattendance'
+    'userattendance' |
+    'events'
 
 export interface User{
     id: number
@@ -73,8 +74,11 @@ export class HomePage extends React.Component<{}, HomeState> {
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
                                 {this.state.loggedIn ? 
-                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
-                                    <></>}
+                                <>
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link>
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('events'))}> Events </Bootstrap.Nav.Link>
+                                </> 
+                                : <></>}
                             </Bootstrap.Nav>
                         </Bootstrap.Navbar.Collapse>
                     </Bootstrap.Container>
@@ -122,6 +126,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Userattendance />
+                    </div>
+                )
+            case 'events':
+                return (
+                    <div>
+                        <Eventsreact />
                     </div>
                 )
         }
