@@ -2,13 +2,15 @@ import React from "react"
 import { Users } from "./accounts"
 import { Map } from "immutable"
 import Userattendance from "./userattendance"
+import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
 
 // Extend when necessary for another case in the render for HomePage
 export type HomeView = 
     'home' |
     'registration/login' |
-    'userattendance'
+    'userattendance' |
+    'events'
 
 export interface User{
     id: number
@@ -22,9 +24,11 @@ export interface HomeState{
     currUser: User | undefined
     loggedIn: boolean
     storage: Map<number, User>
+    currId: number
     setView: (view: HomeView) => (state: HomeState) => HomeState
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
+    addUser: (user: User) => (state: HomeState) => HomeState
 }
 
 export const initHomeState: HomeState = ({
@@ -32,6 +36,7 @@ export const initHomeState: HomeState = ({
     currUser: undefined,
     loggedIn: false,
     storage: Map(),
+    currId: 0,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -45,6 +50,11 @@ export const initHomeState: HomeState = ({
         ...state,
         user: undefined,
         loggedIn: false
+    }),
+    addUser: (user: User) => (state: HomeState) => ({
+        ...state,
+        currId: state.currId + 1,
+        storage: state.storage.set(state.currId, user)
     })
 })
 
@@ -64,8 +74,11 @@ export class HomePage extends React.Component<{}, HomeState> {
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('registration/login'))}> Log in </Bootstrap.Nav.Link> : 
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
                                 {this.state.loggedIn ? 
-                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link> : 
-                                    <></>}
+                                <>
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link>
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('events'))}> Events </Bootstrap.Nav.Link>
+                                </> 
+                                : <></>}
                             </Bootstrap.Nav>
                         </Bootstrap.Navbar.Collapse>
                     </Bootstrap.Container>
@@ -92,12 +105,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.setCurrUser(user))}
+                            insertUser={(user: User) => this.setState(this.state.addUser(user))}
                             emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
                             logIn={
                                 (email: string) => (password: string) => 
                                 {
-                                    let user = this.state.storage.find((user: User) => user.email === email && user.password === password)
+                                    const user = this.state.storage.find((user: User) => user.email === email && user.password === password)
                                     if(user !== undefined)
                                     {
                                         this.setState(this.state.setCurrUser(user))
@@ -113,6 +126,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Userattendance />
+                    </div>
+                )
+            case 'events':
+                return (
+                    <div>
+                        <Eventsreact />
                     </div>
                 )
         }
