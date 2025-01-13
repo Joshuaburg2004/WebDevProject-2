@@ -7,6 +7,7 @@ public class APIV1Controller : Controller
     JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = true };
     public UserStorage userStorage = new UserStorage();
     public AdminStorage adminStorage = new AdminStorage();
+    public UserPlanningStorage userPlanningStorage = new UserPlanningStorage();
 
     [HttpGet("get/user")]
     public async Task<IActionResult> GetUser([FromQuery] Guid userId){
@@ -58,6 +59,12 @@ public class APIV1Controller : Controller
         var admin = await adminStorage.FindAdmin(adminId);
         if(admin is null){ return NotFound(); }
         await adminStorage.DeleteAdmin(admin);
+        return Ok();
+    }
+
+    [HttpPost("create/planning")]
+    public async Task<IActionResult> CreatePlanning([FromBody] UserPlanning userPlanning){
+        await userPlanningStorage.CreatePlanning(userPlanning);
         return Ok();
     }
 }
