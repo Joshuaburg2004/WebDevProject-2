@@ -4,6 +4,7 @@ export const Userattendance = (): JSX.Element => {
   return (
     
 <div>
+  please enter the following information to record your attendance planning 
   <h1>Attendance</h1>
   <div>
         Day: 
