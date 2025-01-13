@@ -1,6 +1,8 @@
 import React from 'react';
  
-export const Userattendance = (): JSX.Element => {
+interface UserPlanning {
+}
+export const UserPlanning = (): JSX.Element => {
   return (
     
 <div>
@@ -34,4 +36,4 @@ export const Userattendance = (): JSX.Element => {
   );
 }
  
-export default Userattendance;
+export default UserPlanning;
