@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
  
 interface UserPlanning {
+  day: string;
+  from: string;
+  to: string;
+  location: string;
 }
+
 export const UserPlanning = (): JSX.Element => {
+    const [newplanning, setNewPlanning] = useState<UserPlanning>({
+      day: '',
+      from: '',
+      to: '',
+      location: '',
+    });
+  
   return (
     
 <div>
@@ -12,18 +24,23 @@ export const UserPlanning = (): JSX.Element => {
         Day: 
         <input
           type='date'
+          value={newplanning.day}
           />
         from:
         <input
           type='time'
+          value={newplanning.from}
         />
         to:  
         <input
           type='time'
+          value={newplanning.to}
         />
         on site or online:
         <input
           type='text'
+          value={newplanning.location}
+          placeholder='Location'
         />
       </div>
       <div>
