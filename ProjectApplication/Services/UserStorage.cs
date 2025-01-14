@@ -4,10 +4,17 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 public class UserStorage : IUserStorage
 {
-    public DatabaseContext _context;
-    public async Task CreateUser(User user) 
+    private readonly DatabaseContext _context;
+    public UserStorage(DatabaseContext context)
     {
-        
+        _context = context;
+    }
+    public async Task<bool> CreateUser(User user) 
+    {
+        if(user is null || _context.Users.Where(x => x.Email == user.Email).Any()) return false;
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+        return true;
     }
     
     public async Task SaveUser(User user) => 

@@ -1,4 +1,4 @@
-interface IAttendanceStorage{
+public interface IAttendanceStorage{
     public Task CreateAttendance(Attendance attendance);
     
     public Task DeleteAttendance(Attendance attendance);

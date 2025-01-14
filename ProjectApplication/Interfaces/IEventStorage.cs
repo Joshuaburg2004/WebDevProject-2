@@ -1,4 +1,4 @@
-interface IEventStorage
+public interface IEventStorage
 {
     public Task CreateEvent(Event @event);
     public Task DeleteEvent(Guid eventId);

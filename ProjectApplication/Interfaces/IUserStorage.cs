@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 public interface IUserStorage
 {
-    public Task CreateUser(User user);
+    public Task<bool> CreateUser(User user);
 
     public Task DeleteUser(User user);
     
