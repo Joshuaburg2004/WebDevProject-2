@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
  
-interface UserPlanning {
+interface UserPlanningState {
   day: string;
   from: string;
   to: string;
@@ -8,7 +8,7 @@ interface UserPlanning {
 }
 
 export const UserPlanning = (): JSX.Element => {
-    const [newplanning, setNewPlanning] = useState<UserPlanning>({
+    const [newplanning, setNewPlanning] = useState<UserPlanningState>({
       day: '',
       from: '',
       to: '',
