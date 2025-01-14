@@ -5,8 +5,7 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<IUserStorage, UserStorage>();
 builder.Services.AddTransient<IAdminStorage, AdminStorage>();
 builder.Services.AddTransient<IUserPlanningStorage, UserPlanningStorage>();
-builder.Services.AddDbContext<UserContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<AdminContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DatabaseContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
