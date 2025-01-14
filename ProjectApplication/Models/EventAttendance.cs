@@ -1,25 +1,25 @@
 public class EventAttendance
 {
-    public Guid Id;
-    public Guid? user_id;
-    public Guid? event_id;
+    public Guid? UserId;
+    public Guid? EventId;
 
     // check for foreign key!!
     // relatively bad design. rework - make composite key.
     // make specific composite class and have that act as the primary key
 
-    private List<int> _ratings;
-    public double Rating;
-    public List<string> Feedback;
+    public List<int> Ratings { get; private set; }
+    public double Rating { get {
+            if(Ratings.Count == 0) return 0; 
+            return Ratings.Average(); 
+        } 
+    }
+    public List<string> Feedback { get; set; }
     
-
-    public EventAttendance(Guid id)
+    public EventAttendance()
     {
-        Id = id;
-        user_id = null;
-        event_id = null;
-        _ratings = new List<int>();
-        Rating = 0; // between 1 and 5
+        UserId = null;
+        EventId = null;
+        Ratings = new List<int>();
         Feedback = new List<string>();
     }
 
@@ -27,8 +27,7 @@ public class EventAttendance
     {
         newRating = Math.Clamp(newRating, 1, 5);
 
-        _ratings.Add(newRating);
-        Rating = _ratings.Average();
+        Ratings.Add(newRating);
 
         if(newFeedback != null && newFeedback != "")
             Feedback.Add(newFeedback);
