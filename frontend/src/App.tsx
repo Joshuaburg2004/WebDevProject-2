@@ -10,11 +10,11 @@ function App(): JSX.Element {
   );
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <AttendanceApp />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <AttendanceApp />
+//   </React.StrictMode>,
+//   document.getElementById("root")
+// );
 
 export default App;
