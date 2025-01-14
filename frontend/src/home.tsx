@@ -1,7 +1,7 @@
 import React from "react"
 import { Users } from "./accounts"
 import { Map } from "immutable"
-import Userattendance from "./userattendance"
+import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
 
@@ -75,7 +75,7 @@ export class HomePage extends React.Component<{}, HomeState> {
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.emptyCurrUser(this.state))}> Log out </Bootstrap.Nav.Link>}
                                 {this.state.loggedIn ? 
                                 <>
-                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> Userattendance </Bootstrap.Nav.Link>
+                                    <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> UserPlanning </Bootstrap.Nav.Link>
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('events'))}> Events </Bootstrap.Nav.Link>
                                 </> 
                                 : <></>}
@@ -125,7 +125,7 @@ export class HomePage extends React.Component<{}, HomeState> {
             case 'userattendance':
                 return (
                     <div>
-                        <Userattendance />
+                        <UserPlanning />
                     </div>
                 )
             case 'events':
