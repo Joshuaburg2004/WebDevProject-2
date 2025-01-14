@@ -1,4 +1,4 @@
-public class Event_Attendance
+public class EventAttendance
 {
     public Guid Id;
     public Guid? user_id;
@@ -13,7 +13,7 @@ public class Event_Attendance
     public List<string> Feedback;
     
 
-    public Event_Attendance(Guid id)
+    public EventAttendance(Guid id)
     {
         Id = id;
         user_id = null;
