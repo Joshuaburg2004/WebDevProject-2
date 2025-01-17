@@ -8,6 +8,8 @@ public interface IUserStorage
     public Task<bool> DeleteUser(User user);
 
     public Task<List<User>> GetAllUsers();
+
+    public Task<User?> LogIn(string email, string password);
     
     public Task<User?> FindUser(Guid userId);
     

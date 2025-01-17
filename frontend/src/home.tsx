@@ -4,6 +4,7 @@ import { Map } from "immutable"
 import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
+import { randomUUID, UUID } from "crypto"
 
 // Extend when necessary for another case in the render for HomePage
 export type HomeView = 
@@ -19,12 +20,31 @@ export interface User{
     password: string
 }
 
+export const register = async (user: User) : Promise<Response> => {
+    return await fetch("api/v1/create/user", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+}
+
+export const login = async (email: string, password: string) : Promise<Response> => {
+    return await fetch("api/v1/login/user", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email, password: password })
+    })
+}
+
 export interface HomeState{
     view: HomeView
     currUser: User | undefined
     loggedIn: boolean
-    storage: Map<number, User>
-    currId: number
+    storage: Map<UUID, User>
     setView: (view: HomeView) => (state: HomeState) => HomeState
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
@@ -36,7 +56,6 @@ export const initHomeState: HomeState = ({
     currUser: undefined,
     loggedIn: false,
     storage: Map(),
-    currId: 0,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -53,8 +72,7 @@ export const initHomeState: HomeState = ({
     }),
     addUser: (user: User) => (state: HomeState) => ({
         ...state,
-        currId: state.currId + 1,
-        storage: state.storage.set(state.currId, user)
+        storage: state.storage.set(randomUUID(), user)
     })
 })
 

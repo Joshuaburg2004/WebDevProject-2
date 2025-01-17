@@ -17,6 +17,8 @@ public class UserStorage : IUserStorage
         return user;
     }
     
+    public async Task<User?> LogIn(string email, string password) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
     public async Task SaveUser(User user) => 
     await CreateUser(user);
 

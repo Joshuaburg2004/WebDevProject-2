@@ -19,6 +19,18 @@ public class APIV1Controller : Controller
         return Ok(await _userStorage.FindUser(userId));
     }
 
+    [HttpGet("get/allusers")]
+    public async Task<IActionResult> GetAllUsers(){
+        return Ok(await _userStorage.GetAllUsers());
+    }
+
+    [HttpGet("login/user")]
+    public async Task<IActionResult> LoginUser([FromQuery] string email, [FromQuery] string password){
+        var user = await _userStorage.LogIn(email, password);
+        if(user is null){ return NotFound(); }
+        return Ok(user);
+    }
+
     [HttpGet("get/batchusers")]
     public async Task<IActionResult> GetBatchUsers([FromQuery] Guid[] userIds){
         await _userStorage.FindManyUsers(userIds);
