@@ -40,7 +40,19 @@ export const login = async (email: string, password: string) : Promise<Response>
     })
 }
 
+export const getAllUsers = async () : Promise<Response> => {
+    return await fetch("api/v1/get/allusers", {
+        method: "GET"
+    })
+}
+
+export type Loader = 
+    'loading' |
+    'loaded' |
+    'unloaded'
+
 export interface HomeState{
+    loader: Loader
     view: HomeView
     currUser: User | undefined
     loggedIn: boolean
@@ -49,13 +61,15 @@ export interface HomeState{
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
     addUser: (user: User) => (state: HomeState) => HomeState
+    updateLoader: (loader: Loader) => (state: HomeState) => HomeState
 }
 
 export const initHomeState: HomeState = ({
+    loader: 'unloaded',
     view: "home",
     currUser: undefined,
     loggedIn: false,
-    storage: Map(),
+    storage: ,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -73,6 +87,10 @@ export const initHomeState: HomeState = ({
     addUser: (user: User) => (state: HomeState) => ({
         ...state,
         storage: state.storage.set(randomUUID(), user)
+    }),
+    updateLoader: (loader: Loader) => (state: HomeState) => ({
+        ...state,
+        loader: loader
     })
 })
 
@@ -123,7 +141,7 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.addUser(user))}
+                            insertUser={(user: User) => this.setState(this.state.updateLoader('loading'), () => register(user).then(() => this.setState(this.state.addUser(user), () => this.setState(this.state.updateLoader('loaded')))))}
                             emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
                             logIn={
                                 (email: string) => (password: string) => 
