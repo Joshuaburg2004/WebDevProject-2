@@ -50,7 +50,7 @@ export const initUserState: UserState = {
 
 export interface UserProps{
     insertUser: (_: User) => void
-    emailUsed: (email: string) => boolean
+    emailUsed: (email: string) => Promise<boolean>
     logIn: (email: string) => (password: string) => boolean
 }
 
@@ -97,27 +97,27 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={e => {
-                                if(this.props.emailUsed(this.state.email))
-                                {
-                                    this.setState(this.state.updateMessage("This email is already in use for an account, please use another."), () => {
-                                        alert(this.state.message);
-                                    });
-                                }
-                                else
-                                {
-                                    this.setState({
-                                        ...this.state, currentId: this.state.currentId + 1
-                                    })
-                                    this.props.insertUser({
-                                        id: this.state.currentId,
-                                        username: this.state.username,
-                                        email: this.state.email,
-                                        password: this.state.password
-                                    })
-                                    this.setState(this.state.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`), () => {
-                                        alert(this.state.message);
-                                    });
-                                }
+                                this.props.emailUsed(this.state.email).then(result => {
+                                    if(result){
+                                        this.setState(this.state.updateMessage("This email is already in use for an account, please use another."), () => {
+                                            alert(this.state.message);
+                                        });
+                                    }
+                                    else{
+                                        this.setState({
+                                            ...this.state, currentId: this.state.currentId + 1
+                                        })
+                                        this.props.insertUser({
+                                            id: this.state.currentId,
+                                            username: this.state.username,
+                                            email: this.state.email,
+                                            password: this.state.password
+                                        })
+                                        this.setState(this.state.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`), () => {
+                                            alert(this.state.message);
+                                        });
+                                    }
+                                })
                             }}>Create account</button>
                         <div><button onClick={_ => this.setState(this.state.setUserView('login'))}>Log in</button></div>
                     </div>

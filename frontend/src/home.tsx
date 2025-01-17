@@ -5,6 +5,7 @@ import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
 import { randomUUID, UUID } from "crypto"
+import { get } from "http"
 
 // Extend when necessary for another case in the render for HomePage
 export type HomeView = 
@@ -46,6 +47,15 @@ export const getAllUsers = async () : Promise<Response> => {
     })
 }
 
+export const isEmailUsed = async (email: string) : Promise<boolean> => {
+    const res = await getAllUsers()
+    if(res.ok){
+        const users = await res.json()
+        return users.some((user: User) => user.email === email)
+    }
+    return false
+}
+
 export type Loader = 
     'loading' |
     'loaded' |
@@ -56,11 +66,10 @@ export interface HomeState{
     view: HomeView
     currUser: User | undefined
     loggedIn: boolean
-    storage: Map<UUID, User>
     setView: (view: HomeView) => (state: HomeState) => HomeState
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
-    addUser: (user: User) => (state: HomeState) => HomeState
+    addUser: (user: User) => (state: HomeState) => Promise<boolean>
     updateLoader: (loader: Loader) => (state: HomeState) => HomeState
 }
 
@@ -69,7 +78,6 @@ export const initHomeState: HomeState = ({
     view: "home",
     currUser: undefined,
     loggedIn: false,
-    storage: ,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -84,10 +92,21 @@ export const initHomeState: HomeState = ({
         user: undefined,
         loggedIn: false
     }),
-    addUser: (user: User) => (state: HomeState) => ({
-        ...state,
-        storage: state.storage.set(randomUUID(), user)
-    }),
+    addUser: (user: User) => async (state: HomeState) => {
+        try {
+            const res = await register(user);
+            if (res.ok) { 
+                console.log("User registered successfully");
+                return true
+            } else {
+                console.error("Registration failed");
+                return false
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+            return false
+        }
+    },
     updateLoader: (loader: Loader) => (state: HomeState) => ({
         ...state,
         loader: loader
@@ -141,8 +160,13 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.updateLoader('loading'), () => register(user).then(() => this.setState(this.state.addUser(user), () => this.setState(this.state.updateLoader('loaded')))))}
-                            emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
+                            insertUser={(user: User) => this.setState(this.state.updateLoader('loading'), () => register(user).then(() => this.state.addUser(user), () => this.setState(this.state.updateLoader('loaded'))))}
+                            emailUsed={async (email: string) => {
+                                this.setState(this.state.updateLoader('loading'));
+                                const result = await isEmailUsed(email);
+                                this.setState(this.state.updateLoader('loaded'));
+                                return result;
+                            }}
                             logIn={
                                 (email: string) => (password: string) => 
                                 {
