@@ -28,9 +28,9 @@ public class APIV1Controller : Controller
     /* Save is included in create, so as to avoid to many endpoints doing the same thing over and over again. */
     [HttpPost("create/user")]
     public async Task<IActionResult> CreateUser([FromBody] User user){
-        bool success = await _userStorage.CreateUser(user);
-        if(!success){ return BadRequest(); }
-        return Ok();
+        User? success = await _userStorage.CreateUser(user);
+        if(success == null){ return BadRequest(); }
+        return Ok(success);
     }
     
     [HttpDelete("delete/user")]
