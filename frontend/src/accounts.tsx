@@ -7,24 +7,25 @@ type UserView =
 
 export interface UserState{
     email: string
-    username: string
+    firstName: string
+    lastName: string
     password: string
     message: string
-    currentId: number
     view: UserView
     setUserView: (view: UserView) => (state: UserState) => UserState
     updateEmail: (email: string) => (state: UserState) => UserState
-    updateUsername: (username: string) => (state: UserState) => UserState
+    updateFirstName: (firstName: string) => (state: UserState) => UserState
+    updateLastName: (lastName: string) => (state: UserState) => UserState
     updatePassword: (password: string) => (state: UserState) => UserState
     updateMessage: (message: string) => (state: UserState) => UserState
 }
 
 export const initUserState: UserState = {
     email: "",
-    username: "",
+    firstName: "",
+    lastName: "",
     password: "",
     message: "",
-    currentId: 0,
     view: 'login',
     setUserView: (view: UserView) => (state: UserState) => ({
         ...state,
@@ -34,9 +35,13 @@ export const initUserState: UserState = {
         ...state,
         email: email
     }),
-    updateUsername: (username: string) => (state: UserState) => ({
+    updateFirstName: (firstName: string) => (state: UserState) => ({
         ...state,
-        username: username
+        firstName: firstName
+    }),
+    updateLastName: (lastName: string) => (state: UserState) => ({
+        ...state,
+        lastName: lastName
     }),
     updatePassword: (password: string) => (state: UserState) => ({
         ...state,
@@ -49,7 +54,7 @@ export const initUserState: UserState = {
 }
 
 export interface UserProps{
-    insertUser: (_: User) => void
+    insertUser: (_: User) => Promise<boolean>
     emailUsed: (email: string) => Promise<boolean>
     logIn: (email: string) => (password: string) => Promise<boolean>
     loadUpdate: (loader: Loader) => void
@@ -68,11 +73,21 @@ export class Users extends React.Component<UserProps, UserState>{
                         Enter your information below to create your account:
                         If you already have an account, click "Log in" below.
                         <div>
-                            Username:
+                            First Name:
                             <input
-                                value={this.state.username}
+                                value={this.state.firstName}
                                 onChange={e => {
-                                    this.setState(this.state.updateUsername(e.currentTarget.value));
+                                    this.setState(this.state.updateFirstName(e.currentTarget.value));
+                                    this.setState(this.state.updateMessage(""))
+                                }}
+                            />
+                        </div>
+                        <div>
+                            Last Name:
+                            <input
+                                value={this.state.lastName}
+                                onChange={e => {
+                                    this.setState(this.state.updateLastName(e.currentTarget.value));
                                     this.setState(this.state.updateMessage(""))
                                 }}
                             />
@@ -105,18 +120,28 @@ export class Users extends React.Component<UserProps, UserState>{
                                         });
                                     }
                                     else{
-                                        this.setState({
-                                            ...this.state, currentId: this.state.currentId + 1
-                                        })
                                         this.props.insertUser({
-                                            id: this.state.currentId,
-                                            username: this.state.username,
+                                            firstName: this.state.firstName,
+                                            lastName: this.state.lastName,
                                             email: this.state.email,
                                             password: this.state.password
+                                        }).then(result => {
+                                            if(result){
+                                                this.setState(this.state.updateMessage(`Created account with username ${this.state.firstName}, email ${this.state.email} and password ${this.state.password}`), () => {
+                                                    alert(this.state.message);
+                                                });
+                                            }
+                                            else{
+                                                this.setState(this.state.updateMessage("Error creating account"), () => {
+                                                    alert(this.state.message);
+                                                });
+                                            }
+                                        }).catch(err => {
+                                            this.setState(this.state.updateMessage("Error creating account"), () => {
+                                                alert(this.state.message);
+                                            });
+                                            console.error(err)
                                         })
-                                        this.setState(this.state.updateMessage(`Created account with username ${this.state.username}, email ${this.state.email} and password ${this.state.password}`), () => {
-                                            alert(this.state.message);
-                                        });
                                     }
                                 })
                             }}>Create account</button>

@@ -9,7 +9,7 @@ public class UserStorage : IUserStorage
     {
         _context = context;
     }
-    public async Task<User?> CreateUser(User user) 
+    public async Task<User?> CreateUser([FromBody] User user) 
     {
         if(user is null || _context.Users.Where(x => x.Email == user.Email).Any()) return null;
         await _context.Users.AddAsync(user);

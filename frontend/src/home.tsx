@@ -4,7 +4,6 @@ import { Map } from "immutable"
 import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
-import { randomUUID, UUID } from "crypto"
 import { get } from "http"
 
 // Extend when necessary for another case in the render for HomePage
@@ -15,14 +14,14 @@ export type HomeView =
     'events'
 
 export interface User{
-    id: number
-    username: string
+    firstName: string
+    lastName: string
     email: string
     password: string
 }
 
 export const register = async (user: User) : Promise<Response> => {
-    return await fetch("api/v1/create/user", {
+    return await fetch("http://localhost:5000/api/v1/create/user", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -32,17 +31,16 @@ export const register = async (user: User) : Promise<Response> => {
 }
 
 export const login = async (email: string, password: string) : Promise<Response> => {
-    return await fetch("api/v1/login/user", {
-        method: "POST",
+    return await fetch(`http://localhost:5000/api/v1/login/user?email=${email}&password=${password}`, {
+        method: "GET",
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email: email, password: password })
     })
 }
 
 export const getAllUsers = async () : Promise<Response> => {
-    return await fetch("api/v1/get/allusers", {
+    return await fetch("http://localhost:5000/api/v1/get/allusers", {
         method: "GET"
     })
 }
@@ -160,7 +158,20 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.updateLoader('loading'), () => register(user).then(() => this.state.addUser(user), () => this.setState(this.state.updateLoader('loaded'))))}
+                            insertUser={
+                                async (user: User) => {
+                                    this.setState(this.state.updateLoader('loading'));
+                                    return register(user).then((res) => {
+                                        if(res.ok){
+                                            this.setState(this.state.setCurrUser(user));
+                                            return true;
+                                        } else {
+                                            console.error("Registration failed");
+                                            return false;
+                                        }
+                                    }).finally(() => this.setState(this.state.updateLoader('loaded')));
+                                }
+                            }
                             emailUsed={async (email: string) => {
                                 this.setState(this.state.updateLoader('loading'));
                                 const result = await isEmailUsed(email);
