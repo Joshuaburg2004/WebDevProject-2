@@ -4,6 +4,7 @@ import { Map } from "immutable"
 import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
 import * as Bootstrap from 'react-bootstrap';
+import { get } from "http"
 
 // Extend when necessary for another case in the render for HomePage
 export type HomeView = 
@@ -13,30 +14,68 @@ export type HomeView =
     'events'
 
 export interface User{
-    id: number
-    username: string
+    firstName: string
+    lastName: string
     email: string
     password: string
 }
 
+export const register = async (user: User) : Promise<Response> => {
+    return await fetch("http://localhost:5000/api/v1/create/user", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+}
+
+export const login = async (email: string, password: string) : Promise<Response> => {
+    return await fetch(`http://localhost:5000/api/v1/login/user?email=${email}&password=${password}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const getAllUsers = async () : Promise<Response> => {
+    return await fetch("http://localhost:5000/api/v1/get/allusers", {
+        method: "GET"
+    })
+}
+
+export const isEmailUsed = async (email: string) : Promise<boolean> => {
+    const res = await getAllUsers()
+    if(res.ok){
+        const users = await res.json()
+        return users.some((user: User) => user.email === email)
+    }
+    return false
+}
+
+export type Loader = 
+    'loading' |
+    'loaded' |
+    'unloaded'
+
 export interface HomeState{
+    loader: Loader
     view: HomeView
     currUser: User | undefined
     loggedIn: boolean
-    storage: Map<number, User>
-    currId: number
     setView: (view: HomeView) => (state: HomeState) => HomeState
     setCurrUser: (user: User) => (state: HomeState) => HomeState
     emptyCurrUser: (state: HomeState) => HomeState
-    addUser: (user: User) => (state: HomeState) => HomeState
+    addUser: (user: User) => (state: HomeState) => Promise<boolean>
+    updateLoader: (loader: Loader) => (state: HomeState) => HomeState
 }
 
 export const initHomeState: HomeState = ({
+    loader: 'unloaded',
     view: "home",
     currUser: undefined,
     loggedIn: false,
-    storage: Map(),
-    currId: 0,
     setView: (view: HomeView) => (state: HomeState) => ({
         ...state,
         view: view
@@ -51,10 +90,24 @@ export const initHomeState: HomeState = ({
         user: undefined,
         loggedIn: false
     }),
-    addUser: (user: User) => (state: HomeState) => ({
+    addUser: (user: User) => async (state: HomeState) => {
+        try {
+            const res = await register(user);
+            if (res.ok) { 
+                console.log("User registered successfully");
+                return true
+            } else {
+                console.error("Registration failed");
+                return false
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+            return false
+        }
+    },
+    updateLoader: (loader: Loader) => (state: HomeState) => ({
         ...state,
-        currId: state.currId + 1,
-        storage: state.storage.set(state.currId, user)
+        loader: loader
     })
 })
 
@@ -105,20 +158,44 @@ export class HomePage extends React.Component<{}, HomeState> {
                 return (
                     <div>
                         <Users 
-                            insertUser={(user: User) => this.setState(this.state.addUser(user))}
-                            emailUsed={(email: string) => this.state.storage.some((user: User) => user.email === email)}
+                            insertUser={
+                                async (user: User) => {
+                                    this.setState(this.state.updateLoader('loading'));
+                                    return register(user).then((res) => {
+                                        if(res.ok){
+                                            this.setState(this.state.setCurrUser(user));
+                                            return true;
+                                        } else {
+                                            console.error("Registration failed");
+                                            return false;
+                                        }
+                                    }).finally(() => this.setState(this.state.updateLoader('loaded')));
+                                }
+                            }
+                            emailUsed={async (email: string) => {
+                                this.setState(this.state.updateLoader('loading'));
+                                const result = await isEmailUsed(email);
+                                this.setState(this.state.updateLoader('loaded'));
+                                return result;
+                            }}
                             logIn={
                                 (email: string) => (password: string) => 
                                 {
-                                    const user = this.state.storage.find((user: User) => user.email === email && user.password === password)
-                                    if(user !== undefined)
-                                    {
-                                        this.setState(this.state.setCurrUser(user))
-                                        return true
-                                    }
-                                    return false
+                                    this.setState(this.state.updateLoader('loading'));
+                                    return login(email, password).then((res) => {
+                                        if(res.ok){
+                                            res.json().then((user: User) => {
+                                                this.setState(this.state.setCurrUser(user));
+                                            })
+                                            return true;
+                                        } else {
+                                            console.error("Login failed");
+                                            return false;
+                                        }
+                                    }).finally(() => this.setState(this.state.updateLoader('loaded')));
                                 }
-                            } 
+                            }
+                            loadUpdate={(loader: Loader) => this.setState(this.state.updateLoader(loader))}
                         />
                     </div>
                 )

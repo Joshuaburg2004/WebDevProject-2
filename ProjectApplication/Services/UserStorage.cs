@@ -9,21 +9,21 @@ public class UserStorage : IUserStorage
     {
         _context = context;
     }
-    public async Task<bool> CreateUser(User user) 
+    public async Task<User?> CreateUser([FromBody] User user) 
     {
-        if(user is null || _context.Users.Where(x => x.Email == user.Email).Any()) return false;
+        if(user is null || _context.Users.Where(x => x.Email == user.Email).Any()) return null;
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
-        return true;
+        return user;
     }
     
+    public async Task<User?> LogIn(string email, string password) => await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
     public async Task SaveUser(User user) => 
     await CreateUser(user);
 
     public async Task<User?> FindUser(Guid userId) {
-        var users = JsonSerializer.Deserialize<List<User>>(await System.IO.File.ReadAllTextAsync($"users/users.json"));
-        if(users is null){ return null; }
-        var user = users.FirstOrDefault(u => u.Id == userId);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         return user;
     }
 
@@ -36,10 +36,14 @@ public class UserStorage : IUserStorage
         return users;
     }
 
-    public async Task DeleteUser(User user) {
-        var users = JsonSerializer.Deserialize<List<User>>(System.IO.File.ReadAllText($"users/users.json"));
-        if(users is null){ return; }
-        users.Remove(user);
-        await System.IO.File.WriteAllTextAsync($"users/users/{user.Id}", JsonSerializer.Serialize(users));
+    public async Task<bool> DeleteUser(User user) {
+        _context.Users.Remove(user);
+        int changed = await _context.SaveChangesAsync();
+        if(changed == 0) return false;
+        return true;
+    }
+
+    public async Task<List<User>> GetAllUsers() {
+        return await _context.Users.ToListAsync();
     }
 }

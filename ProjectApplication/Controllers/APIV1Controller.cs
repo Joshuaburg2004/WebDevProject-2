@@ -19,6 +19,18 @@ public class APIV1Controller : Controller
         return Ok(await _userStorage.FindUser(userId));
     }
 
+    [HttpGet("get/allusers")]
+    public async Task<IActionResult> GetAllUsers(){
+        return Ok(await _userStorage.GetAllUsers());
+    }
+
+    [HttpGet("login/user")]
+    public async Task<IActionResult> LoginUser([FromQuery] string email, [FromQuery] string password){
+        var user = await _userStorage.LogIn(email, password);
+        if(user is null){ return NotFound(); }
+        return Ok(user);
+    }
+
     [HttpGet("get/batchusers")]
     public async Task<IActionResult> GetBatchUsers([FromQuery] Guid[] userIds){
         await _userStorage.FindManyUsers(userIds);
@@ -28,9 +40,9 @@ public class APIV1Controller : Controller
     /* Save is included in create, so as to avoid to many endpoints doing the same thing over and over again. */
     [HttpPost("create/user")]
     public async Task<IActionResult> CreateUser([FromBody] User user){
-        bool success = await _userStorage.CreateUser(user);
-        if(!success){ return BadRequest(); }
-        return Ok();
+        User? success = await _userStorage.CreateUser(user);
+        if(success == null){ return BadRequest(); }
+        return Ok(success);
     }
     
     [HttpDelete("delete/user")]
