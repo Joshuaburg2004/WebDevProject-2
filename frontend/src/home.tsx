@@ -170,15 +170,21 @@ export class HomePage extends React.Component<{}, HomeState> {
                             logIn={
                                 (email: string) => (password: string) => 
                                 {
-                                    const user = this.state.storage.find((user: User) => user.email === email && user.password === password)
-                                    if(user !== undefined)
-                                    {
-                                        this.setState(this.state.setCurrUser(user))
-                                        return true
-                                    }
-                                    return false
+                                    this.setState(this.state.updateLoader('loading'));
+                                    return login(email, password).then((res) => {
+                                        if(res.ok){
+                                            res.json().then((user: User) => {
+                                                this.setState(this.state.setCurrUser(user));
+                                            })
+                                            return true;
+                                        } else {
+                                            console.error("Login failed");
+                                            return false;
+                                        }
+                                    }).finally(() => this.setState(this.state.updateLoader('loaded')));
                                 }
-                            } 
+                            }
+                            loadUpdate={(loader: Loader) => this.setState(this.state.updateLoader(loader))}
                         />
                     </div>
                 )

@@ -1,4 +1,4 @@
-import { User } from './home'
+import { Loader, User } from './home'
 import React from 'react';
 
 type UserView = 
@@ -51,7 +51,8 @@ export const initUserState: UserState = {
 export interface UserProps{
     insertUser: (_: User) => void
     emailUsed: (email: string) => Promise<boolean>
-    logIn: (email: string) => (password: string) => boolean
+    logIn: (email: string) => (password: string) => Promise<boolean>
+    loadUpdate: (loader: Loader) => void
 }
 
 export class Users extends React.Component<UserProps, UserState>{
@@ -148,19 +149,21 @@ export class Users extends React.Component<UserProps, UserState>{
                             />
                         </div>
                         <button onClick={_ => {
-                                if(this.props.logIn(this.state.email)(this.state.password))
-                                {
-                                    this.setState(this.state.updateMessage("Logged in!"), () => {
-                                        alert(this.state.message);
-                                    });
-                                }
-                                else
-                                {
-                                    this.setState(this.state.updateMessage("Not logged in, combination of email and password not found"), () => {
-                                        alert(this.state.message);
-                                    });
-                                }
-                                
+                                this.props.loadUpdate('loading');
+                                this.props.logIn(this.state.email)(this.state.password).then(result => {
+                                    if(result)
+                                    {
+                                        this.setState(this.state.updateMessage("Logged in!"), () => {
+                                            alert(this.state.message);
+                                        });
+                                    }
+                                    else
+                                    {
+                                        this.setState(this.state.updateMessage("Not logged in, combination of email and password not found"), () => {
+                                            alert(this.state.message);
+                                        });
+                                    }
+                                }).finally(() => this.props.loadUpdate('loaded'));
                             }}>Log in</button>
                         <div><button onClick={_ => this.setState(this.state.setUserView('register'))}>Register</button></div>
                     </div>
