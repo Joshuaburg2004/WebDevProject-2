@@ -1,4 +1,4 @@
-interface IAdminStorage{
+public interface IAdminStorage{
     public Task CreateAdmin(Admin admin);
     
     public Task DeleteAdmin(Admin admin);
