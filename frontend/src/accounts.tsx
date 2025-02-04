@@ -128,7 +128,7 @@ export class Users extends React.Component<UserProps, UserState>{
                                             password: this.state.password
                                         }).then(result => {
                                             if(result){
-                                                this.setState(this.state.updateMessage(`Created account with full name ${this.state.firstName} ${this.state.lastName}, email ${this.state.email} and password ${this.state.password}`), () => {
+                                                this.setState(this.state.updateMessage(`Created account with full name ${this.state.firstName} ${this.state.lastName}, email ${this.state.email} and your choice of password!`), () => {
                                                     alert(this.state.message);
                                                 });
                                             }
