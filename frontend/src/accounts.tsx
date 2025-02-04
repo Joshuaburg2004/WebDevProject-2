@@ -105,11 +105,12 @@ export class Users extends React.Component<UserProps, UserState>{
                         <div>
                             Password:
                             <input
+                                type="password"
                                 value={this.state.password}
                                 onChange={e => {
                                     this.setState(this.state.updatePassword(e.currentTarget.value)); 
                                     this.setState(this.state.updateMessage(""))
-                                }}                                
+                                }}
                             />
                         </div>
                         <button onClick={e => {
@@ -166,6 +167,7 @@ export class Users extends React.Component<UserProps, UserState>{
                         <div>
                             Password:
                             <input
+                                type="password"
                                 value={this.state.password}
                                 onChange={e => {
                                     this.setState(this.state.updatePassword(e.currentTarget.value)); 
