@@ -133,8 +133,8 @@ export class HomePage extends React.Component<{}, HomeState> {
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('userattendance'))}> UserPlanning </Bootstrap.Nav.Link>
                                     <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('events'))}> Events </Bootstrap.Nav.Link>
                                 </> : <></>}
-                                {this.state.loggedIn ? 
-                                <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('eventattendance'))}> Eventattendance </Bootstrap.Nav.Link> : <></>}
+                                {/* {this.state.loggedIn ? 
+                                <Bootstrap.Nav.Link onClick={() => this.setState(this.state.setView('eventattendance'))}> Eventattendance </Bootstrap.Nav.Link> : <></>} */}
                             </Bootstrap.Nav>
                         </Bootstrap.Navbar.Collapse>
                     </Bootstrap.Container>
