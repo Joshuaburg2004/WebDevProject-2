@@ -3,7 +3,7 @@ import { Users } from "./accounts"
 import { Map } from "immutable"
 import UserPlanning from "./userplanning"
 import Eventsreact from "./eventsreact"
-import EventAttendancePage from "./EventAttendance";
+// import EventAttendancePage from "./EventAttendance";
 import * as Bootstrap from 'react-bootstrap';
 import { get } from "http"
 
@@ -214,12 +214,12 @@ export class HomePage extends React.Component<{}, HomeState> {
                         <Eventsreact />
                     </div>
                 )
-            case 'eventattendance':
-                return (
-                    <div>
-                        <EventAttendancePage />
-                    </div>
-                )
+            // case 'eventattendance':
+            //     return (
+            //         <div>
+            //             <EventAttendancePage />
+            //         </div>
+            //     )
         }
     }
 }
