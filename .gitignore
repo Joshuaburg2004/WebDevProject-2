@@ -467,3 +467,4 @@ frontend/yarn-error.log*
 # databases
 *.db-shm
 *.db-wal
+ProjectApplication/database.db
