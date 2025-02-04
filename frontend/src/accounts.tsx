@@ -33,7 +33,7 @@ export const initUserState: UserState = {
     }),
     updateEmail: (email: string) => (state: UserState) => ({
         ...state,
-        email: email
+        email: email.toLowerCase()
     }),
     updateFirstName: (firstName: string) => (state: UserState) => ({
         ...state,
