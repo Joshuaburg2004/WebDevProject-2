@@ -12,7 +12,7 @@ export type HomeView =
     'home' |
     'registration/login' |
     'userattendance' |
-    'eventattendance' |
+    // 'eventattendance' |
     'events'
 
 export interface User{
